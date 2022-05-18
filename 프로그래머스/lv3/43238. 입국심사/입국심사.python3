@@ -1,0 +1,21 @@
+def solution(n, times):
+    answer = 0
+    start = min(times)
+    end = max(times) * n
+    
+    
+    while start <= end:
+        middle = (start + end) // 2
+        temp = 0
+        
+        for t in times:
+            temp += middle // t
+            
+        if temp < n:
+            start = middle + 1
+
+        else:
+            answer = middle
+            end = middle - 1
+        
+    return answer
