@@ -1,0 +1,33 @@
+from collections import deque
+
+def solution(priorities, location):
+    queue = deque(priorities)
+    answer = 0
+    
+    while queue:
+        
+        if len(queue) == 1:
+            answer += 1
+            break
+        
+        if 0 == location:
+            num = queue.popleft()
+            if num < max(queue):
+                queue.append(num)
+                location += len(queue) - 1
+
+            else:
+                answer += 1
+                break
+
+        else:
+            num = queue.popleft()
+            if num < max(queue):
+                queue.append(num)
+
+            else:
+                answer += 1
+
+            location -= 1
+            
+    return answer
