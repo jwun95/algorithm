@@ -1,0 +1,36 @@
+def solution(dartResult):
+    caculator = []
+    num = ''
+    end = 0
+    
+    for s in range(len(dartResult)):
+        if dartResult[s] == 'S':
+            caculator.append(int(num))
+            num = ''
+
+        elif dartResult[s] == 'D':
+            caculator.append(int(num) ** 2)
+            num = ''
+
+        elif dartResult[s] == 'T':
+            caculator.append(int(num) ** 3)
+            num = ''
+
+        elif dartResult[s] == '*':
+            current_length = len(caculator)
+            if current_length - 3 < 0:
+                end = 0
+            else: 
+                end = current_length - 2
+                
+            for c in range(current_length-1, end-1, -1):
+                caculator[c] = caculator[c] * 2
+            
+
+        elif dartResult[s] == '#':
+            caculator[-1] = caculator[-1] * -1
+
+        else:
+            num += dartResult[s]
+    
+    return sum(caculator)
