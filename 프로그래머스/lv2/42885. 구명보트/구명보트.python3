@@ -1,0 +1,16 @@
+def solution(people, limit):
+    answer = 0
+
+    people.sort(reverse=True)
+
+    for p in people:
+        print(p)
+
+        rest = limit - p
+
+        if rest >= people[-1]:
+            people.pop()
+
+        answer += 1
+
+    return answer
