@@ -1,0 +1,19 @@
+def solution(board, moves):
+    board_length = len(board)
+    basket = []
+    
+    count = 0
+
+    for move in moves:
+        for l in range(board_length):
+            if board[l][move-1] != 0:
+                basket.append(board[l][move-1])
+                board[l][move-1] = 0
+
+                if len(basket) >= 2 and basket[-1] == basket[-2]:
+                    basket.pop()
+                    basket.pop()
+                    count += 2
+                break
+
+    return count
