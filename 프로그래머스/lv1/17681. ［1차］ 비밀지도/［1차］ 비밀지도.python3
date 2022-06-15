@@ -1,0 +1,41 @@
+def make_2(number, n):
+
+    trans = ''
+
+    for _ in range(n):
+        if number % 2 == 1:
+            trans = '1' + trans
+
+        else:
+            trans = '0' + trans
+
+        number = number // 2
+
+    return trans
+
+
+def solution(n, arr1, arr2):
+    answer = []
+    new_arr1 = []
+    new_arr2 = []
+
+    for a in arr1:
+        new_arr1.append(make_2(a, n))
+
+    for a in arr2:
+        new_arr2.append(make_2(a, n))
+
+    for x in range(n):
+
+        temp = ''
+
+        for y in range(n):
+            if new_arr1[x][y] == '1' or new_arr2[x][y] == '1':
+                temp += '#'
+
+            else:
+                temp += ' '
+
+        answer.append(temp)
+
+    return answer
