@@ -1,0 +1,15 @@
+def solution(nums):
+    answer = 0
+    
+    nums_length = len(nums) // 2
+    trans_set = set(nums)
+    types_num = len(trans_set)
+    
+    if types_num <= nums_length:
+        answer = types_num
+        
+    else:
+        answer = nums_length
+    
+    
+    return answer
