@@ -1,0 +1,11 @@
+def solution(n):
+    answer = n
+
+    for num in range(n-1, 0, -1):
+        value_num = n % num
+
+        if value_num == 1:
+            answer = min(num, answer)
+
+
+    return answer
