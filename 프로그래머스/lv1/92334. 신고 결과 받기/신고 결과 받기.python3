@@ -1,0 +1,32 @@
+def solution(id_list, report, k):
+    final_count = {}
+    report_history = {}
+    report_count = {}
+    ban_list = []
+
+    for i in id_list:
+        report_history[i] = []
+        report_count[i] = 0
+        final_count[i] = 0
+
+    for r in report:
+        reporter, reported = r.split(' ')
+
+        if reported not in report_history[reporter]:
+            report_history[reporter].append(reported)
+
+            if reported in report_count:
+                report_count[reported] += 1
+
+    for c in report_count:
+        if report_count[c] >= k:
+            ban_list.append(c)
+
+    for rh in report_history:
+        for h in report_history[rh]:
+            if h in ban_list:
+                final_count[rh] += 1
+
+    answer = [final_count[f] for f in final_count]
+
+    return answer
