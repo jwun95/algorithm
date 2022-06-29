@@ -1,0 +1,20 @@
+def solution(numbers, target):
+    answer = 0
+
+    temp = [0]
+
+    for n in numbers:
+
+        inst = []
+
+        for t in temp:
+            inst.append(t + (n * 1))
+            inst.append(t + (n * -1))
+
+        temp = inst
+
+    for t in temp:
+        if t == target:
+            answer += 1
+
+    return answer
