@@ -9,7 +9,5 @@ function solution(number, k) {
         stack.push(number[i]);
     }
     
-    stack.splice(stack.length - k)
-    
-    return stack.join("");
+    return stack.slice(0, stack.length - k).join("");
 }
