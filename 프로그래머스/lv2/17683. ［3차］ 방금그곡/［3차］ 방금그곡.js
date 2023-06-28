@@ -33,7 +33,6 @@ function solution(m, musicinfos) {
         if (infos.includes(sM)) result.push([title, gap]);
     }
     
-    console.log(result);
     result.sort((x,y) => y[1] - x[1]);
     return result.length ? result[0][0] : "(None)";
 }
