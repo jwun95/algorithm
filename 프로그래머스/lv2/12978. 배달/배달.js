@@ -1,5 +1,4 @@
 function solution(N, road, K) {
-    var answer = 0;
     const village = Array.from(Array(N + 1), () => Array(N + 1).fill(0));
     
     road.forEach((v) => {
