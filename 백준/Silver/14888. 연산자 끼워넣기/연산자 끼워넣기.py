@@ -1,47 +1,42 @@
-import math
-import itertools
-import sys
+N = int(input())
+data = list(map(int, input().split()))
+
+add, sub, mul, div = map(int, input().split())
+
+max_num = -int(1e9)
+min_num = int(1e9)
 
 
-N = int(sys.stdin.readline().rstrip())
-numbers = list(map(int, sys.stdin.readline().split()))
-signals = list(map(int, sys.stdin.readline().split()))
-permutations = []
-answer = []
+def dfs(curr, hap):
+    global add, sub, mul, div, max_num, min_num
+
+    if curr == N:
+        max_num = max(max_num, hap)
+        min_num = min(min_num, hap)
+
+    else:
+        if add > 0:
+            add -= 1
+            dfs(curr + 1, hap + data[curr])
+            add += 1
+
+        if sub > 0:
+            sub -= 1
+            dfs(curr + 1, hap - data[curr])
+            sub += 1
+
+        if mul > 0:
+            mul -= 1
+            dfs(curr + 1, hap * data[curr])
+            mul += 1
+
+        if div > 0:
+            div -= 1
+            dfs(curr + 1, int(hap / data[curr]))
+            div += 1
 
 
-def caculator(arr):
-    hap = numbers[0]
-    for i in range(0, N - 1):
-        if arr[i] == "+":
-            hap += numbers[i + 1]
-        elif arr[i] == "-":
-            hap -= numbers[i + 1]
-        elif arr[i] == "x":
-            hap = hap * numbers[i + 1]
-        else:
-            if hap < 0:
-                hap = math.ceil(hap / numbers[i + 1])
-            else:
-                hap = hap // numbers[i + 1]
+dfs(1, data[0])
 
-    return hap
-
-
-for s in range(0, 4):
-    for signal in range(0, signals[s]):
-        if s == 0:
-            permutations.append("+")
-        elif s == 1:
-            permutations.append("-")
-        elif s == 2:
-            permutations.append("x")
-        else:
-            permutations.append("/")
-
-nPr = list(itertools.permutations(permutations, N - 1))
-for n in nPr:
-    answer.append(caculator(list(n)))
-
-print(max(answer))
-print(min(answer))
+print(max_num)
+print(min_num)
