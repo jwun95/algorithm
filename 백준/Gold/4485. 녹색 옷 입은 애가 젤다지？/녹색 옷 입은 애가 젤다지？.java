@@ -1,69 +1,81 @@
+
 import java.io.*;
 import java.util.*;
 
-public class Main {
+class Node implements Comparable<Node> {
+	int y, x, cost;
 
-	static final int[] dy = { 0, 0, -1, 1 };
-	static final int[] dx = { 1, -1, 0, 0 };
+	public Node(int y, int x, int cost) {
+		this.y = y;
+		this.x = x;
+		this.cost = cost;
+	}
+
+	@Override
+	public int compareTo(Node o) {
+		return this.cost - o.cost;
+	}
+
+}
+
+public class Main {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
-		int count = 1;
+		StringTokenizer st;
+		int T = 1;
+
+		final int[] dy = { -1, 1, 0, 0 };
+		final int[] dx = { 0, 0, -1, 1 };
 
 		while (true) {
-			int T = Integer.parseInt(br.readLine());
-			if (T == 0)
+			int N = Integer.parseInt(br.readLine());
+			if (N == 0)
 				break;
 
-			int[][] map = new int[T][T];
-			int[][] memo = new int[T][T];
-			
+			int[][] graph = new int[N][N];
+			int[][] memo = new int[N][N];
 
-			for (int y = 0; y < T; y++) {
-				st = new StringTokenizer(br.readLine(), " ");
-				for (int x = 0; x < T; x++) {
-					map[y][x] = Integer.parseInt(st.nextToken());
-				}
-
+			for (int n = 0; n < N; n++) {
+				Arrays.fill(memo[n], Integer.MAX_VALUE);
 			}
 
-			ArrayDeque<int[]> queue = new ArrayDeque<>();
-			queue.offer(new int[] { 0, 0 });
-			boolean[][] v = new boolean[T][T];
-			v[0][0] = true;
-			memo[0][0] = map[0][0];
+			for (int y = 0; y < N; y++) {
+				st = new StringTokenizer(br.readLine());
+				for (int x = 0; x < N; x++) {
+					graph[y][x] = Integer.parseInt(st.nextToken());
+				}
+			}
 
-			while (!queue.isEmpty()) {
-				int[] yx = queue.poll();
-				int y = yx[0];
-				int x = yx[1];
+			PriorityQueue<Node> pq = new PriorityQueue<>();
+			memo[0][0] = graph[0][0];
+			pq.offer(new Node(0, 0, graph[0][0]));
+
+			while (!pq.isEmpty()) {
+				Node node = pq.poll();
+
+				if (node.y == N - 1 && node.x == N - 1) {
+					sb.append("Problem ").append(T).append(": ").append(node.cost).append("\n");
+					break;
+				}
 
 				for (int d = 0; d < 4; d++) {
-					int ny = y + dy[d];
-					int nx = x + dx[d];
+					int ny = node.y + dy[d];
+					int nx = node.x + dx[d];
 
-					if (ny < 0 || ny >= T || nx < 0 || nx >= T)
+					if (ny >= N || ny < 0 || nx >= N || nx < 0)
 						continue;
 
-					if (!v[ny][nx]) {
-						memo[ny][nx] = memo[y][x] + map[ny][nx];
-						v[ny][nx] = true;
-						queue.offer(new int[] { ny, nx });
-					} else {
-						if (memo[ny][nx] > memo[y][x] + map[ny][nx]) {
-							memo[ny][nx] = memo[y][x] + map[ny][nx];
-							queue.offer(new int[] { ny, nx });
-						}
+					if (memo[ny][nx] > node.cost + graph[ny][nx]) {
+						pq.offer(new Node(ny, nx, node.cost + graph[ny][nx]));
+						memo[ny][nx] = node.cost + graph[ny][nx];
 					}
 				}
 			}
+			T++;
 			
-			sb.append("Problem").append(" ").append(count).append(":").append(" ").append(memo[T - 1][T - 1]).append("\n");
-			count++;
 		}
-
 		System.out.println(sb.toString());
 		br.close();
 	}
