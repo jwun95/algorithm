@@ -1,14 +1,16 @@
+
 import java.io.*;
 import java.util.*;
 
-class Node {
+class Node2 {
+
 	int vertex, weight;
-	Node next;
-	
-	Node(int vertex, int weight, Node next) {
+	Node2 next;
+
+	public Node2(int vertex, Node2 next, int weight) {
 		this.vertex = vertex;
-		this.weight = weight;
 		this.next = next;
+		this.weight = weight;
 	}
 }
 
@@ -17,58 +19,53 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
-		
-		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
 		int V = Integer.parseInt(st.nextToken());
 		int E = Integer.parseInt(st.nextToken());
-		
-		int start = Integer.parseInt(br.readLine()) - 1;
-		int[] minDist = new int[V];
-		Arrays.fill(minDist, Integer.MAX_VALUE);
-		minDist[start] = 0;
-		boolean[] visited = new boolean[V];
-		
-		Node[] adj = new Node[V];
-		
-		for (int e = 0; e < E; e ++) {
-			st = new StringTokenizer(br.readLine(), " ");
-			int u = Integer.parseInt(st.nextToken()) - 1;
-			int v = Integer.parseInt(st.nextToken()) - 1;
-			int w = Integer.parseInt(st.nextToken());
-			
-			adj[u] = new Node(v, w, adj[u]);
-		}
-		
-		for (int i = 0; i < V; i ++) {
-			int minV = -1;
-			int min = Integer.MAX_VALUE;
-			
-			for (int j = 0; j < V; j ++) {
-				if (!visited[j] && minDist[j] < min) {
-					minV = j;
-					min = minDist[j];
-				}
-			}
-			if (minV == -1) break;
-			visited[minV] = true;
-			
-			for (Node temp = adj[minV]; temp != null; temp = temp.next) {
-				if (!visited[temp.vertex] && temp.weight + min < minDist[temp.vertex]) {
-					minDist[temp.vertex] = temp.weight + min;
-				}
-			}
-		}
-		
-		for (int v = 0; v < V; v ++) {
-			if (minDist[v] == Integer.MAX_VALUE) {
-				sb.append("INF").append("\n");
-			} else {
-				sb.append(minDist[v]).append("\n");
-			}
-		}
-		System.out.println(sb.toString());
-		
-		br.close();
-	}
+		int K = Integer.parseInt(br.readLine()) - 1;
 
+		int[] minEdge = new int[V];
+		boolean[] v = new boolean[V];
+		Arrays.fill(minEdge, Integer.MAX_VALUE);
+		minEdge[K] = 0;
+		Node2[] node2 = new Node2[V];
+
+		for (int e = 0; e < E; e++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken()) - 1;
+			int to = Integer.parseInt(st.nextToken()) - 1;
+			int weight = Integer.parseInt(st.nextToken());
+
+			node2[from] = new Node2(to, node2[from], weight);
+		}
+
+		PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> x[1] - y[1]);
+		pq.offer(new int[] { K, 0 });
+
+		while (!pq.isEmpty()) {
+			int[] cur = pq.poll();
+			int minVertex = cur[0];
+			int min = cur[1];
+
+			if (v[minVertex])
+				continue;
+
+			v[minVertex] = true;
+
+			for (Node2 n = node2[minVertex]; n != null; n = n.next) {
+				if (!v[n.vertex] && minEdge[n.vertex] > n.weight + min) {
+					minEdge[n.vertex] =  n.weight + min;
+					pq.offer(new int[] { n.vertex, minEdge[n.vertex] });
+				}
+			}
+		}
+
+		for (int a: minEdge) {
+			sb.append(a == Integer.MAX_VALUE ? "INF" : a).append("\n");
+		}
+		
+		System.out.println(sb.toString());
+	}
 }
